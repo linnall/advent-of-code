@@ -9,7 +9,7 @@ def solution():
                     ret += 1
             prevDepth = line
             count += 1
-    file.close()
     print(ret)
+
 
 solution()

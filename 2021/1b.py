@@ -18,7 +18,6 @@ def solution():
                 threeSum.pop(0)
                 threeSum.append(int(line))
             count += 1
-    file.close()
     print(ret)
 
 
