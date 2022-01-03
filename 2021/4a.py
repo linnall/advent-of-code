@@ -13,21 +13,16 @@ class BingoBoard:
         return ret
 
     def check_value(self, val: str):
-        r = 0
-        c = 0
         found = 0
-        for row in self.board:
-            for num in row:
+        for r, row in enumerate(self.board):
+            for c, num in enumerate(row):
                 if num == val:
                     row.pop(c)
                     row.insert(c, '-1')
                     found = 1
                     break
-                c += 1
             if found:
                 break
-            r += 1
-            c = 0
         if found:
             self.markedNums += 1
 
