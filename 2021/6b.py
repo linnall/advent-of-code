@@ -15,11 +15,11 @@ def solution():
     for i in range(256):
         index = i % 9
         if days[index] > 0:
-            # move current number of fish to index + 6 % 9
+            # move current number of fish to index + 7 % 9
             adultFishNum = days[index]
             days[index] = 0
             days[(index + 7) % 9] += adultFishNum
-            # add adultFishNum of babies to index + 8 % 9
+            # add adultFishNum of babies to index + 9 % 9
             days[(index + 9) % 9] += adultFishNum
 
     print(sum(days))
