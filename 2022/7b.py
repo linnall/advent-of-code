@@ -26,10 +26,12 @@ def solution():
                 for i in range(len(paths), -1, -1):
                     path = "/".join(paths[0:i])
                     sizes[path] += int(size)
-        for szs in sizes.values():
-            if szs <= 100000:
-                total += szs
-        return total
+        usedSpace = max(sizes.values())
+        minDirSize = 70000000
+        for sz in sizes.values():
+            if usedSpace - sz <= 40000000:
+                minDirSize = min(sz, minDirSize)
+        return minDirSize
 
 
 print(solution())
