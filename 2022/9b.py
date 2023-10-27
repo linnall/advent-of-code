@@ -17,15 +17,18 @@ def solution():
         tailPositions = set([(0, 0)])
         directions = {"R": (0, 1), "L": (0, -1), "U": (-1, 0), "D": (1, 0)}
         head = [0, 0]
-        tail = [0, 0]
+        tails = [[0, 0] for _ in range(9)]
         for line in lines:
             direction, paces = line.split()
             x, y = directions[direction]
             for _ in range(int(paces)):
                 head = [head[0] + x, head[1] + y]
-                print("head", head)
-                tail = moveTail(head, tail)
-                tailPositions.add(tuple(tail))
+                tail = moveTail(head, tails[0])
+                tails[0] = tail
+                for i in range(1, 9):
+                    tail = moveTail(tails[i - 1], tails[i])
+                    tails[i] = tail
+                tailPositions.add(tuple(tails[8]))
         print(tailPositions)
         return len(tailPositions)
 
