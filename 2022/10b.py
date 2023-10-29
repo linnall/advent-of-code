@@ -5,16 +5,18 @@ def solution():
     with open("10.in", "r") as file:
         instructions = deque(file.read().split("\n"))
         X = 1
+        verticalOffset = 0
         target = 39
         buffer = deque()
         for i in range(240):
-            if i >= X - 1 and i <= X + 1:
+            if i >= X + verticalOffset - 1 and i <= X + verticalOffset + 1:
                 print("#", end="")
             else:
                 print(".", end="")
             if i == target:
                 print("\n", end="")
                 target += 40
+                verticalOffset += 40
             if instructions:
                 line = instructions.popleft().split()
                 if line[0] == "addx":
