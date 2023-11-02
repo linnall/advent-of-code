@@ -20,16 +20,10 @@ def bfs(grid, start, end):
         row, col = queue.popleft()
         levelNum -= 1
         if row == end[0] and col == end[1]:
-            print(row, col)
-            print("RETURN")
             return pathLen
         if (row, col) in seen:
             if levelNum == 0:
-                print("LEVEL 0")
-                print(queue)
-                print(seen)
                 levelNum = len(queue)
-                print(levelNum)
                 pathLen += 1
             continue
         seen.add((row, col))
@@ -58,16 +52,8 @@ def bfs(grid, start, end):
             # else:
             #     grid[row][col + 1] = "."
         grid[row][col] = "."  # mark current cell as visited
-        print_grid(grid)
-        print(queue)
-        print(seen)
-        print(levelNum)
         if levelNum == 0:
-            print("LEVEL 0")
-            print(queue)
-            print(seen)
             levelNum = len(queue)
-            print(levelNum)
             pathLen += 1
 
 
@@ -86,8 +72,6 @@ def solution():
             elif grid[i][j] == "E":
                 end = [i, j]
                 grid[i][j] = "z"
-    print(start)
-    print(end)
 
     # run bfs
     return bfs(grid, start, end)
