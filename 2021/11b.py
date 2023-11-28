@@ -47,8 +47,6 @@ def checkAllFlashed(grid):
     return False
 
 def solution():
-    flashCount = 0
-    N = 10
     grid = []
     with open('11.in', 'r') as file:
         lines = file.read().split('\n')
