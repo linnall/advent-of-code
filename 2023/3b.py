@@ -15,13 +15,13 @@ def solution():
                     gear_pos.append((i, j))
 
                 if not ch.isnumeric() and num:
-                    num_pos = [(i, col) for col in range(j - len(num), j)]
+                    num_pos = [(i, col) for col in range(j - len(num), j)] # you can use THIS to iterate over in following for loop
                     for k, digit in enumerate(num):
                         newCol = j - len(num) + k
                         grid[i][newCol] = [num, num_pos]
                     num = ''
             if num:
-                num_pos = [(i, col) for col in range(M - len(num), M)]
+                num_pos = [(i, col) for col in range(M - len(num), M)] # you can use THIS to iterate over in following for loop
                 for k, digit in enumerate(num):
                     newCol = M - len(num) + k
                     grid[i][newCol] = [num, num_pos]
