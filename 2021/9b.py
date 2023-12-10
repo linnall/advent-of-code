@@ -1,58 +1,10 @@
-'''
-using where the low points are, dfs on all neighbors of low point
-condition: current square must be strictly increasing 
-edge case: the next square has the SAME height as the current square -> -1 from size of basin
-'''
-import heapq
-
-# maintain this heap as size 3
-largestBasins = []
-heapq.heapify(largestBasins)
+from collections import deque
 
 def inMatrix(coor, r, c):
     row, col = coor
     if row < 0 or row > r - 1 or col < 0 or col > c - 1:
         return False
     return True
-
-def dfs(matrix, n, m, coor):
-    i, j = coor
-    val = int(matrix[i][j])
-    
-    # if square has already been visited, return
-    if val == 10:
-        return 1
-
-    # mark as visited
-    matrix[i][j] = "10"
-
-    # check if top, left, right, left are strictly increasing
-    # top
-    if inMatrix([i - 1, j], n, m):
-        if int(matrix[i-1][j]) == 9 or int(matrix[i-1][j]) <= val:
-            return 1
-        else:
-            return dfs(matrix, n, m, [i - 1, j]) + 1
-    # bottom
-    if inMatrix([i + 1, j], n, m) or int(matrix[i-1][j]) <= val:
-        if int(matrix[i+1][j]) == 9:
-            return 1
-        else:
-            return dfs(matrix, n, m, [i + 1, j]) + 1
-    # left
-    if inMatrix([i, j - 1], n, m) or int(matrix[i-1][j]) <= val:
-        if int(matrix[i][j-1]) == 9:
-            return 1
-        else:
-            return dfs(matrix, n, m, [i, j - 1]) + 1      
-
-    # right
-    if inMatrix([i, j + 1], n, m) or int(matrix[i-1][j]) <= val:
-        if int(matrix[i][j+1]) == 9:
-            return 1
-        else:
-            return dfs(matrix, n, m, [i, j + 1]) + 1
-
 
 
 def solution():
@@ -68,45 +20,50 @@ def solution():
     n = len(matrix)
     m = len(matrix[0])
 
+    basins = []
+
     for i in range(n):
         for j in range(m):
             val = int(matrix[i][j])
 
-            # part of a basin, cannot be a low point
-            if val == 10:
-                continue
-
             # top
             if inMatrix([i - 1, j], n, m):
-                if int(matrix[i-1][j]) <= val or int(matrix[i-1][j]) == 10:
+                if int(matrix[i-1][j]) <= val:
                     continue
             # bottom
             if inMatrix([i + 1, j], n, m):
-                if int(matrix[i+1][j]) <= val or int(matrix[i-1][j]) == 10:
+                if int(matrix[i+1][j]) <= val:
                     continue
             # left
             if inMatrix([i, j - 1], n, m):
-                if int(matrix[i][j-1]) <= val or int(matrix[i-1][j]) == 10:
+                if int(matrix[i][j-1]) <= val:
                     continue
             # right
             if inMatrix([i, j + 1], n, m):
-                if int(matrix[i][j+1]) <= val or int(matrix[i-1][j]) == 10:
+                if int(matrix[i][j+1]) <= val:
                     continue
+            basins.append((i, j))
 
-            print("value of lowest point:")
-            print(val)
-            # current cell in matrix is a low point
-            basinSize = dfs(matrix, n, m, [i, j])
-            print("basin size: ")
-            print(basinSize)
-            if not largestBasins or basinSize > largestBasins[0]:
-                if largestBasins:
-                    heapq.heappop(largestBasins)
-                heapq.heappush(largestBasins, basinSize)
-    
-    # multiply largest basin sizes
-    product = 1
-    for basin in largestBasins:
-        product *= basin
+    # track 3 largest basins
+    directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+    basinSizes = []
+    for basin in basins:
+        queue = deque([basin])
+        size = 0
+        seen = set()
+        while queue:
+            row, col = queue.popleft()
+            if (row, col) in seen:
+                continue
+            size += 1
+            seen.add((row, col))
+            for x, y in directions:
+                newRow, newCol = row + x, col + y
+                if inMatrix([newRow, newCol], n, m) and int(matrix[newRow][newCol]) > int(matrix[row][col]) and matrix[newRow][newCol] != '9':
+                    queue.append((newRow, newCol))
+        basinSizes.append(size)
+    basinSizes.sort(reverse=True)
+    return basinSizes[0] * basinSizes[1] * basinSizes[2]
 
-solution()
+
+print(solution())
