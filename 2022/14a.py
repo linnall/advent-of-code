@@ -1,68 +1,63 @@
-def drop_sand(grid, maxX, maxY):
-    # row, col
-    currCoor = (0, 500)
+def drop_sand(grid, maxCol, maxRow):
+    currCoor = (500, 0)
     sandCount = 0
-    prevCoor = (0, 500)
     while True:
-        # row, col
-        x, y = currCoor
-        print(y, x)
-        if grid[x][y] == '#':
-            grid[prevCoor[0]][prevCoor[1]] = '+' # sand lands
-            sandCount += 1
-            currCoor = (0, 500)
-            prevCoor = (0, 500)
-            continue
-        # if x < 0 or x > maxX or y < 0 or y > maxY:
-        #     return sandCount
-        if x + 1 > maxY:
+        # print(currCoor)
+        col, row = currCoor
+        if row + 1 > maxRow:
             return sandCount
-        if grid[x + 1][y] == '.':
-            prevCoor = currCoor
-            currCoor = (x + 1, y)
+        if grid[row + 1][col] == '.':
+            currCoor = (col, row + 1)
             continue
-        if y - 1 < 0:
+        if col - 1 < 0:
             return sandCount
-        if grid[x + 1][y - 1] == '.':
-            prevCoor = currCoor
-            currCoor = (x + 1, y - 1)
-            continue
-        if y + 1 > maxX:
+        if grid[row + 1][col - 1] == '.':
+           currCoor = (col - 1, row + 1)
+           continue
+        if col + 1 > maxCol:
             return sandCount
-        if grid[x + 1][y + 1] == '.':
-            prevCoor = currCoor
-            currCoor = (x + 1, y + 1)
+        if grid[row + 1][col + 1] == '.':
+            currCoor = (col + 1, row + 1)
             continue
-
+        # sand cannot fall further
+        grid[row][col] = '+'
+        currCoor = (500, 0)
+        sandCount += 1
+        continue
 
 def solution():
-    maxX = 500
-    maxY = 0
+    maxRow = 0
+    maxCol = 500
     with open('14.in', 'r') as file:
         lines = file.read().split('\n')
         walls = []
         for line in lines:
             coordinates = line.split(' -> ')
             startCoor = list(map(int, coordinates[0].split(',')))
+            maxCol = max(maxCol, startCoor[0])
+            maxRow = max(maxRow, startCoor[1]) 
             for coor in coordinates[1:]:
                 endX, endY = list(map(int, coor.split(',')))
-                maxX = max(maxX, endX)
-                maxY = max(maxY, endY)
+                maxCol = max(maxCol, endX)
+                maxRow = max(maxRow, endY)
                 walls.append([startCoor, [endX, endY]])
                 startCoor = [endX, endY]
-    grid = [['.' for _ in range(maxX + 1)] for _ in range(maxY + 1)]
+    grid = [['.' for _ in range(maxCol + 1)] for _ in range(maxRow + 1)]
+
     # adding walls
     for wall in walls:
         start, end = wall
         startX, startY = start
         endX, endY = end
         if startX != endX:
-            for i in range(startX, endX + 1):
-                grid[startY][i] = '#'
-        else:
-            for i in range(startY, endY + 1):
-                grid[i][startX] = '#'
-    
-    return drop_sand(grid, maxY, maxX)
+            left = min(startX, endX)
+            for i in range(abs(startX - endX) + 1):
+                grid[startY][left + i] = '#'
+        else: # startY != endY
+            left = min(startY, endY)
+            for i in range(abs(startY - endY) + 1):
+                grid[left + i][startX] = '#'
+
+    return drop_sand(grid, maxCol, maxRow)
 
 print(solution())
