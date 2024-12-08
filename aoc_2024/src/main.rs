@@ -1,8 +1,8 @@
 #![allow(dead_code)]
 extern crate core;
 
-mod day2;
+mod day3;
 
 fn main() {
-    let _ = day2::part_two();
+    let _ = day3::part_two();
 }
