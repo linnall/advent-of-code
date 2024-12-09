@@ -4,5 +4,5 @@ extern crate core;
 mod day3;
 
 fn main() {
-    let _ = day3::part_two();
+    let _ = day3::part_one();
 }
