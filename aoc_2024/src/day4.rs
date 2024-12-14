@@ -60,6 +60,28 @@ fn xmas_count(row: usize, col: usize, grid: &Vec<Vec<String>>) -> i32 {
     total
 }
 
+fn x_mas_count(ud: usize, lr: usize, grid: &Vec<Vec<String>>) -> i32 {
+    let mut total = 0;
+    let rows = grid.len();
+    let cols = grid[0].len();
+    if &grid[ud][lr] == "A" && ud > 0 && ud < rows - 1 && lr > 0 && lr < cols - 1 {
+        let cross1 = String::from_iter([
+            &grid[ud - 1][lr - 1].chars().next().unwrap(),
+            &grid[ud][lr].chars().next().unwrap(),
+            &grid[ud + 1][lr + 1].chars().next().unwrap(),
+        ]);
+        let cross2 = String::from_iter([
+            &grid[ud + 1][lr - 1].chars().next().unwrap(),
+            &grid[ud][lr].chars().next().unwrap(),
+            &grid[ud - 1][lr + 1].chars().next().unwrap(),
+        ]);
+        if (cross1 == "MAS" || cross1 == "SAM") && (cross2 == "MAS" || cross2 == "SAM") {
+            total += 1;
+        }
+    }
+    total
+}
+
 pub fn part_one() {
     let file_path = "4.in";
     let grid = build_grid(file_path);
@@ -67,6 +89,18 @@ pub fn part_one() {
     for row in 0..grid.len() {
         for col in 0..grid[row].len() {
             total += xmas_count(row, col, &grid);
+        }
+    }
+    println!("{total}");
+}
+
+pub fn part_two() {
+    let file_path = "4.in";
+    let grid = build_grid(file_path);
+    let mut total = 0;
+    for row in 0..grid.len() {
+        for col in 0..grid[row].len() {
+            total += x_mas_count(row, col, &grid);
         }
     }
     println!("{total}");
